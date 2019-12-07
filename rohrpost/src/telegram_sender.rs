@@ -1,8 +1,8 @@
 use crate::http_stream;
 use crate::http_stream::{HttpMsg, HttpStream};
-use crate::receiver::Receiver;
 use crate::telegram_methods;
 use crate::telegram_methods::TelegramMethod;
+use crate::telegram_receiver::TelegramReceiver;
 use async_std::net::TcpStream;
 use async_tls::TlsConnector;
 use futures::{AsyncRead, AsyncWrite};
@@ -22,13 +22,13 @@ impl Config {
     }
 }
 
-pub struct Sender {
+pub struct TelegramSender {
     config: Config,
 }
 
-impl Sender {
+impl TelegramSender {
     pub fn new(config: Config) -> Self {
-        Sender { config: config }
+        TelegramSender { config: config }
     }
     fn uri<M>(&self) -> String
     where
@@ -96,7 +96,7 @@ impl Sender {
         Ok(http_msg)
     }
 
-    pub async fn register_web_hook(&self, receiver: &Receiver) -> std::io::Result<()> {
+    pub async fn register_web_hook(&self, receiver: &TelegramReceiver) -> std::io::Result<()> {
         let method = telegram_methods::setWebhookBuilder::default()
             .url(receiver.get_webhook_uri())
             .build()
