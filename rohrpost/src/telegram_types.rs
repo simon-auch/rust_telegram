@@ -5,13 +5,7 @@ type Boolean = bool;
 type True = bool;
 type Float = f64;
 //unsupported types
-type ShippingQuery = ();
-type PreCheckoutQuery = ();
-type PassportData = ();
-type Invoice = ();
-type SuccessfulPayment = ();
 type Game = ();
-type Sticker = ();
 type CallbackGame = ();
 type InputFile = ();
 ///
@@ -2025,4 +2019,422 @@ pub struct InputMediaDocument {
     #[builder(default)]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parse_mode: Option<String>,
+}
+///
+///This object represents a sticker.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct Sticker {
+    ///Identifier for this file
+    pub file_id: String,
+    ///Sticker width
+    pub width: Integer,
+    ///Sticker height
+    pub height: Integer,
+    ///True, if the sticker is animated
+    pub is_animated: Boolean,
+    ///Optional. Sticker thumbnail in the .webp or .jpg format
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thumb: Option<PhotoSize>,
+    ///Optional. Emoji associated with the sticker
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub emoji: Option<String>,
+    ///Optional. Name of the sticker set to which the sticker belongs
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub set_name: Option<String>,
+    ///Optional. For mask stickers, the position where the mask should be placed
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mask_position: Option<MaskPosition>,
+    ///Optional. File size
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_size: Option<Integer>,
+}
+///
+///This object represents a sticker set.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct StickerSet {
+    ///Sticker set name
+    pub name: String,
+    ///Sticker set title
+    pub title: String,
+    ///True, if the sticker set contains animated stickers
+    pub is_animated: Boolean,
+    ///True, if the sticker set contains masks
+    pub contains_masks: Boolean,
+    ///List of all set stickers
+    pub stickers: Vec<Sticker>,
+}
+///
+///This object describes the position on faces where a mask should be placed by default.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct MaskPosition {
+    ///The part of the face relative to which the mask should be placed. One of “forehead”, “eyes”, “mouth”, or “chin”.
+    pub point: String,
+    ///Shift by X-axis measured in widths of the mask scaled to the face size, from left to right. For example, choosing -1.0 will place mask just to the left of the default mask position.
+    pub x_shift: Float,
+    ///Shift by Y-axis measured in heights of the mask scaled to the face size, from top to bottom. For example, 1.0 will place the mask just below the default mask position.
+    pub y_shift: Float,
+    ///Mask scaling coefficient. For example, 2.0 means double size.
+    pub scale: Float,
+}
+///
+///This object represents a portion of the price for goods or services.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct LabeledPrice {
+    ///Portion label
+    pub label: String,
+    ///Price of the product in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+    pub amount: Integer,
+}
+///
+///This object contains basic information about an invoice.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct Invoice {
+    ///Product name
+    pub title: String,
+    ///Product description
+    pub description: String,
+    ///Unique bot deep-linking parameter that can be used to generate this invoice
+    pub start_parameter: String,
+    ///Three-letter ISO 4217 currency code
+    pub currency: String,
+    ///Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+    pub total_amount: Integer,
+}
+///
+///This object represents a shipping address.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct ShippingAddress {
+    ///ISO 3166-1 alpha-2 country code
+    pub country_code: String,
+    ///State, if applicable
+    pub state: String,
+    ///City
+    pub city: String,
+    ///First line for the address
+    pub street_line1: String,
+    ///Second line for the address
+    pub street_line2: String,
+    ///Address post code
+    pub post_code: String,
+}
+///
+///This object represents information about an order.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct OrderInfo {
+    ///Optional. User name
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    ///Optional. User's phone number
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+    ///Optional. User email
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    ///Optional. User shipping address
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shipping_address: Option<ShippingAddress>,
+}
+///
+///This object represents one shipping option.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct ShippingOption {
+    ///Shipping option identifier
+    pub id: String,
+    ///Option title
+    pub title: String,
+    ///List of price portions
+    pub prices: Vec<LabeledPrice>,
+}
+///
+///This object contains basic information about a successful payment.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct SuccessfulPayment {
+    ///Three-letter ISO 4217 currency code
+    pub currency: String,
+    ///Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+    pub total_amount: Integer,
+    ///Bot specified invoice payload
+    pub invoice_payload: String,
+    ///Optional. Identifier of the shipping option chosen by the user
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shipping_option_id: Option<String>,
+    ///Optional. Order info provided by the user
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_info: Option<OrderInfo>,
+    ///Telegram payment identifier
+    pub telegram_payment_charge_id: String,
+    ///Provider payment identifier
+    pub provider_payment_charge_id: String,
+}
+///
+///This object contains information about an incoming shipping query.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct ShippingQuery {
+    ///Unique query identifier
+    pub id: String,
+    ///User who sent the query
+    pub from: User,
+    ///Bot specified invoice payload
+    pub invoice_payload: String,
+    ///User specified shipping address
+    pub shipping_address: ShippingAddress,
+}
+///
+///This object contains information about an incoming pre-checkout query.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PreCheckoutQuery {
+    ///Unique query identifier
+    pub id: String,
+    ///User who sent the query
+    pub from: User,
+    ///Three-letter ISO 4217 currency code
+    pub currency: String,
+    ///Total price in the smallest units of the currency (integer, not float/double). For example, for a price of US$ 1.45 pass amount = 145. See the exp parameter in currencies.json, it shows the number of digits past the decimal point for each currency (2 for the majority of currencies).
+    pub total_amount: Integer,
+    ///Bot specified invoice payload
+    pub invoice_payload: String,
+    ///Optional. Identifier of the shipping option chosen by the user
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shipping_option_id: Option<String>,
+    ///Optional. Order info provided by the user
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub order_info: Option<OrderInfo>,
+}
+///
+///Contains information about Telegram Passport data shared with the bot by the user.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportData {
+    ///Array with information about documents and other Telegram Passport elements that was shared with the bot
+    pub data: Vec<EncryptedPassportElement>,
+    ///Encrypted credentials required to decrypt the data
+    pub credentials: EncryptedCredentials,
+}
+///
+///This object represents a file uploaded to Telegram Passport. Currently all Telegram Passport files are in JPEG format when decrypted and don't exceed 10MB.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportFile {
+    ///Identifier for this file
+    pub file_id: String,
+    ///File size
+    pub file_size: Integer,
+    ///Unix time when the file was uploaded
+    pub file_date: Integer,
+}
+///
+///Contains information about documents or other Telegram Passport elements shared with the bot by the user.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct EncryptedPassportElement {
+    ///Element type. One of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”, “phone_number”, “email”.
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Optional. Base64-encoded encrypted Telegram Passport element data provided by the user, available for “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport” and “address” types. Can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data: Option<String>,
+    ///Optional. User's verified phone number, available only for “phone_number” type
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
+    ///Optional. User's verified email address, available only for “email” type
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    ///Optional. Array of encrypted files with documents provided by the user, available for “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<PassportFile>>,
+    ///Optional. Encrypted file with the front side of the document, provided by the user. Available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub front_side: Option<PassportFile>,
+    ///Optional. Encrypted file with the reverse side of the document, provided by the user. Available for “driver_license” and “identity_card”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reverse_side: Option<PassportFile>,
+    ///Optional. Encrypted file with the selfie of the user holding a document, provided by the user; available for “passport”, “driver_license”, “identity_card” and “internal_passport”. The file can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selfie: Option<PassportFile>,
+    ///Optional. Array of encrypted files with translated versions of documents provided by the user. Available if requested for “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration” and “temporary_registration” types. Files can be decrypted and verified using the accompanying EncryptedCredentials.
+    #[builder(default)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub translation: Option<Vec<PassportFile>>,
+    ///Base64-encoded element hash for using in PassportElementErrorUnspecified
+    pub hash: String,
+}
+///
+///Contains data required for decrypting and authenticating EncryptedPassportElement. See the Telegram Passport Documentation for a complete description of the data decryption and authentication processes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct EncryptedCredentials {
+    ///Base64-encoded encrypted JSON-serialized data with unique user's payload, data hashes and secrets required for EncryptedPassportElement decryption and authentication
+    pub data: String,
+    ///Base64-encoded data hash for data authentication
+    pub hash: String,
+    ///Base64-encoded secret, encrypted with the bot's public RSA key, required for data decryption
+    pub secret: String,
+}
+///
+///Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorDataField {
+    ///Error source, must be data
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the error, one of “personal_details”, “passport”, “driver_license”, “identity_card”, “internal_passport”, “address”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Name of the data field which has the error
+    pub field_name: String,
+    ///Base64-encoded data hash
+    pub data_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with the front side of a document. The error is considered resolved when the file with the front side of the document changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorFrontSide {
+    ///Error source, must be front_side
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded hash of the file with the front side of the document
+    pub file_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with the reverse side of a document. The error is considered resolved when the file with reverse side of the document changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorReverseSide {
+    ///Error source, must be reverse_side
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the issue, one of “driver_license”, “identity_card”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded hash of the file with the reverse side of the document
+    pub file_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with the selfie with a document. The error is considered resolved when the file with the selfie changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorSelfie {
+    ///Error source, must be selfie
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded hash of the file with the selfie
+    pub file_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with a document scan. The error is considered resolved when the file with the document scan changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorFile {
+    ///Error source, must be file
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded file hash
+    pub file_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with a list of scans. The error is considered resolved when the list of files containing the scans changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorFiles {
+    ///Error source, must be files
+    pub source: String,
+    ///The section of the user's Telegram Passport which has the issue, one of “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///List of base64-encoded file hashes
+    pub file_hashes: Vec<String>,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with one of the files that constitute the translation of a document. The error is considered resolved when the file changes.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorTranslationFile {
+    ///Error source, must be translation_file
+    pub source: String,
+    ///Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded file hash
+    pub file_hash: String,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue with the translated version of a document. The error is considered resolved when a file with the document translation change.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorTranslationFiles {
+    ///Error source, must be translation_files
+    pub source: String,
+    ///Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///List of base64-encoded file hashes
+    pub file_hashes: Vec<String>,
+    ///Error message
+    pub message: String,
+}
+///
+///Represents an issue in an unspecified place. The error is considered resolved when new data is added.
+#[derive(Serialize, Deserialize, Builder, Clone)]
+#[builder(setter(strip_option))]
+pub struct PassportElementErrorUnspecified {
+    ///Error source, must be unspecified
+    pub source: String,
+    ///Type of element of the user's Telegram Passport which has the issue
+    #[serde(rename = "type")]
+    pub type_: String,
+    ///Base64-encoded element hash
+    pub element_hash: String,
+    ///Error message
+    pub message: String,
 }
