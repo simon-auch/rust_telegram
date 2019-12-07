@@ -71,12 +71,14 @@ where
         let json = String::from_utf8(body.clone());
         if json.is_err() {
             println!("Could not parse body into utf-8 string");
+            println!("{}", json.err().unwrap());
             continue;
         }
         let json = json.unwrap();
         let update = serde_json::from_str(&json);
         if update.is_err() {
             println!("Could not deserialize string into Update");
+            println!("{}", update.err().unwrap());
             continue;
         }
         let update: telegram_types::Update = update.unwrap();
