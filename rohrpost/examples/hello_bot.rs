@@ -17,25 +17,28 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name="hello_bot")]
-struct Opt{
-	///File that contains the api token
-	#[structopt(short, long, parse(from_os_str))]
-	token_file: PathBuf,
-	///Webhook path, for example: "https://mydomain:8443/some/path"
-	#[structopt(short, long)]
-	webhook: String,
-	///Certificate file, for example: "fullchain.pem"
-	#[structopt(short, long, parse(from_os_str))]
-	cert: PathBuf,
-	///Private key for the Certificate, for example: "privkey.pem"
-	#[structopt(short, long, parse(from_os_str))]
-	privkey: PathBuf,
+#[structopt(name = "hello_bot")]
+struct Opt {
+    ///File that contains the api token
+    #[structopt(short, long, parse(from_os_str))]
+    token_file: PathBuf,
+    ///Webhook path, for example: "https://mydomain:8443/some/path"
+    #[structopt(short, long)]
+    webhook: String,
+    ///Certificate file, for example: "fullchain.pem"
+    #[structopt(short, long, parse(from_os_str))]
+    cert: PathBuf,
+    ///Private key for the Certificate, for example: "privkey.pem"
+    #[structopt(short, long, parse(from_os_str))]
+    privkey: PathBuf,
 }
 
 fn main() {
     let opt = Opt::from_args();
-    let token = std::fs::read_to_string(&opt.token_file).unwrap().trim().to_string();
+    let token = std::fs::read_to_string(&opt.token_file)
+        .unwrap()
+        .trim()
+        .to_string();
     let config = telegram_sender::Config::new(token);
     let sender = TelegramSender::new(config);
     let config = telegram_receiver::Config::new(
@@ -75,7 +78,7 @@ async fn send_stop_on_stdin_enter(sender: sync::Sender<()>) {
     stdin.read_line(&mut line).await;
     //we dont even have to send something, dropping it is more than enough
     //but this way we force the compiler into not dropping it earlier (could that even happen?)
-    sender.send(());
+    sender.send(()).await;
 }
 
 async fn register_web_hook(sender: &TelegramSender, receiver: &TelegramReceiver) -> io::Result<()> {

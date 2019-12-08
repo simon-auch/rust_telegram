@@ -13,7 +13,7 @@ use rustls::{Certificate, NoClientAuth, PrivateKey, ServerConfig};
 use std::fs::File;
 use std::io::BufReader;
 use std::net::SocketAddr;
-use std::path::{Path,PathBuf};
+use std::path::{Path, PathBuf};
 use std::sync::Arc;
 
 /// Load the passed certificates file
