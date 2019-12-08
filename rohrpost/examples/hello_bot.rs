@@ -25,10 +25,10 @@ struct Opt{
 	///Webhook path, for example: "https://mydomain:8443/some/path"
 	#[structopt(short, long)]
 	webhook: String,
-	///Certificate file
+	///Certificate file, for example: "fullchain.pem"
 	#[structopt(short, long, parse(from_os_str))]
 	cert: PathBuf,
-	///Private key for the Certificate
+	///Private key for the Certificate, for example: "privkey.pem"
 	#[structopt(short, long, parse(from_os_str))]
 	privkey: PathBuf,
 }
