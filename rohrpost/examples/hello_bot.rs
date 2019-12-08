@@ -1,4 +1,5 @@
 extern crate rohrpost;
+use structopt::StructOpt;
 
 use async_std::io;
 use async_std::sync;
@@ -13,16 +14,35 @@ use rohrpost::TelegramReceiver;
 use rohrpost::TelegramSender;
 use std::net::SocketAddr;
 
-const TOKEN: &'static str = "1066698743:AAEbuPawIIjn9merOarOkZE688qk0WOFfxc";
+use std::path::PathBuf;
+
+#[derive(StructOpt, Debug)]
+#[structopt(name="basic")]
+struct Opt{
+	///File that contains the api token
+	#[structopt(short, long, parse(from_os_str))]
+	token_file: PathBuf,
+	///Webhook path, for example: "https://mydomain:8443/some/path"
+	#[structopt(short, long)]
+	webhook: String,
+	///Certificate file
+	#[structopt(short, long, parse(from_os_str))]
+	cert: PathBuf,
+	///Private key for the Certificate
+	#[structopt(short, long, parse(from_os_str))]
+	privkey: PathBuf,
+}
 
 fn main() {
-    let config = telegram_sender::Config::new(String::from(TOKEN));
+    let opt = Opt::from_args();
+    let token = std::fs::read_to_string(&opt.token_file).unwrap().trim().to_string();
+    let config = telegram_sender::Config::new(token);
     let sender = TelegramSender::new(config);
     let config = telegram_receiver::Config::new(
         SocketAddr::from(([0, 0, 0, 0], 8443)),
-        String::from("fullchain.pem"),
-        String::from("privkey.pem"),
-        String::from("https://auch.dnshome.de:8443/somesecretpath"),
+        opt.cert,
+        opt.privkey,
+        opt.webhook,
     );
     let (recv, stop_send, http_recv) = TelegramReceiver::new(config);
 

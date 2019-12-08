@@ -13,7 +13,7 @@ use rustls::{Certificate, NoClientAuth, PrivateKey, ServerConfig};
 use std::fs::File;
 use std::io::BufReader;
 use std::net::SocketAddr;
-use std::path::Path;
+use std::path::{Path,PathBuf};
 use std::sync::Arc;
 
 /// Load the passed certificates file
@@ -51,16 +51,16 @@ fn load_config(cert: &Path, key: &Path) -> io::Result<ServerConfig> {
 ///Config for the receiver
 pub struct Config {
     addr: SocketAddr,
-    certificate: String,
-    certificate_key: String,
+    certificate: PathBuf,
+    certificate_key: PathBuf,
     webhook_path: String,
 }
 
 impl Config {
     pub fn new(
         addr: SocketAddr,
-        certificate: String,
-        certificate_key: String,
+        certificate: PathBuf,
+        certificate_key: PathBuf,
         webhook_path: String,
     ) -> Self {
         Config {
