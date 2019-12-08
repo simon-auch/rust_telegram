@@ -17,7 +17,7 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name="basic")]
+#[structopt(name="hello_bot")]
 struct Opt{
 	///File that contains the api token
 	#[structopt(short, long, parse(from_os_str))]
