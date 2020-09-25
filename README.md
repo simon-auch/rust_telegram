@@ -10,3 +10,4 @@ Future plans:
 - More examples
 - code quality (remove `unwraps` and `panics`)
 - maybe improve some of the interfaces
+- some automatet tests?
